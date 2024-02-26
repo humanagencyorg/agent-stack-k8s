@@ -28,6 +28,11 @@ kubectl get secrets --namespace namespace
 kubectl get secret name --namespace namespace -o yaml
 ```
 
+To view the secrets, the has returned for the `env-var` secrets must be based64 decoded using the following command:
+```
+echo "env-var_secret_hash" | base64 --decode
+```
+
 ### Agent token
 
 Your Buildkite agent token can be found here:
