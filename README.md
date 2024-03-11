@@ -55,6 +55,23 @@ The following variables must be set in the script:
 * `$GITHUB_REPO` - i.e. yourorg/repo name
 * `$GITHUB_TOKEN` - github oauth token with `repo` permission
 
+## Troubleshooting
+
+### Hanging Builds
+
+The first step to troubleshooting a hanging build is to make sure that ssh calls to `dokku@formliapp.com` are able to reach the server.  You can SSH into a Kubernetes POD using the following command:
+```
+kubectl get pods --namespace buildkite
+kubectl exec -it <deployer_pod_name> -n buildkite -- /bin/bash
+```
+
+Once inside of the pod, you can ssh into the machine using private key stored in `/buildkite/secrets/private-ssh-key`.  You may want to use `ssh-add` to add the ssh key to your session instead of using `-i key_path` to specify the key.
+
+If you are running into issues with hanging builds, consider deleting the `deployer` pod.  A new `deployer` pod will be immediately regenerated.
+```
+kubectl delete pod <deployer_pod_name> --namespace buildkite
+```
+
 ## Viewing the generated manifests
 
 You can view the generated manifests before apply them to the cluster with:
